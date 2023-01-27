@@ -142,6 +142,12 @@
 \ProcessOptions
 %    \end{macrocode}
 %
+% \subsection{Utilities}
+% 
+%    \begin{macrocode}
+\def\nidanfloat@vfilmaxdepth{\vskip\z@ \@plus 1fil \@minus\maxdepth}
+%    \end{macrocode}
+%
 %\ifJAPANESE
 % \subsection{フロートパラメータ}
 % ここでは、段抜きのフロートをページ下部に置くために作成したパラメータに
@@ -1022,13 +1028,13 @@
 %    \end{macrocode}
 %\ifJAPANESE
 % 左カラムに残す部分の高さを|\@fixht|に格納する。
+% \changes{v2.10}{2023/01/28}{\cs{vsplit}時に\cs{maxdepth}増やしていたのを削除}
 %\else
 % Stores the height of the part left in the left column in |\@fixht|.
 %\fi
 %    \begin{macrocode}
         \@fixht\textheight
         \advance\@fixht-\@tempdima
-        \advance\@fixht\maxdepth
 %    \end{macrocode}
 %\ifJAPANESE
 % |\@fixht|分のテキストをボックス0に格納する。
@@ -1053,7 +1059,6 @@
 % Also, return the contents of box 0 to the left column.
 %\fi
 %    \begin{macrocode}
-        \advance\@fixht-\maxdepth
         \@tempdima\baselineskip \advance\@tempdima-\topskip
         \setbox\@outputbox=\vbox{%
             \ifvoid\@leftcolumn
@@ -1076,13 +1081,14 @@
 % この場所のすぐ上にあるコードの|\unvbox\@outputbox|の直後にあった|vss|を
 % こちらに持ってきました。
 % \changes{v2.8}{2017/05/01}{\cs{vss}の位置を移動}
+% \changes{v2.10}{2023/01/28}{\cs{vss}を\cs{nidanfloat@vfilmaxdepth}変更 (texjporg/nidanfloat#5)}
 %\else
 % \emph{Modified by the Japanese \TeX{} development community}:
 % the |\vss| that was immediately after |\unvbox\@outputbox|
 % of the code immediately above this location was moved here.
 %\fi
 %    \begin{macrocode}
-        \setbox\@leftcolumn=\vbox to\@fixht{\unvbox\z@\vss}% to here (2017/05/01)
+        \setbox\@leftcolumn=\vbox to\@fixht{\unvbox\z@\nidanfloat@vfilmaxdepth}% to here (2017/05/01)
       \fi
 %    \end{macrocode}
 %\ifJAPANESE
@@ -1102,6 +1108,8 @@
 % 右カラムについても同様に処理します。これで、古くからあった
 % 右カラムとフロートが重なるバグを解消しました。
 % \changes{v2.8}{2017/05/01}{右カラム用の処理を丸ごと追加}
+% \changes{v2.10}{2023/01/28}{\cs{vss}を\cs{nidanfloat@vfilmaxdepth}変更 (texjporg/nidanfloat#5)}
+% \changes{v2.10}{2023/01/28}{\cs{vsplit}時に\cs{maxdepth}増やしていたのを削除}
 %\else
 % \emph {Added by the Japanese \TeX\ development community}:
 % Process the right column as well.
@@ -1115,12 +1123,10 @@
       \ifdim\@rightfixht>\textheight
         \@rightfixht\textheight
         \advance\@rightfixht-\@tempdima
-        \advance\@rightfixht\maxdepth
         \vbadness=\@M \splittopskip=\topskip \splitmaxdepth=\maxdepth
         \setbox\z@=\vsplit\@outputbox to\@rightfixht
-        \advance\@rightfixht-\maxdepth
         \unvbox\@outputbox
-        \setbox\@outputbox=\vbox to\@rightfixht{\unvbox\z@\vss}%
+        \setbox\@outputbox=\vbox to\@rightfixht{\unvbox\z@\nidanfloat@vfilmaxdepth}%
       \fi
       \@rightfixht\ht\@outputbox
         \advance\@rightfixht\dp\@outputbox \advance\@rightfixht\@floatht
@@ -1164,6 +1170,7 @@
 % \changes{v2.3}{2000/12/20}{\cs{gdef}を\cs{global}\cs{let}に変更}
 % \changes{v2.8}{2017/05/01}{右カラムでは\cs{@rightfixht}の高さで
 %    組み立て、\cs{@colht}も更新するようにした}
+% \changes{v2.10}{2023/01/28}{\cs{vss}を\cs{nidanfloat@vfilmaxdepth}変更 (texjporg/nidanfloat#5)}
 %\else
 % Used to assemble left and right columns.
 %
@@ -1178,7 +1185,7 @@
   \setbox\@leftcolumn\vbox to\@fixht{\boxmaxdepth\maxdepth
       \unvbox\@tempboxa
       \vskip-\floatsep\topfigrule\vskip\textfloatsep\unvbox\@leftcolumn
-      \vss}%
+      \nidanfloat@vfilmaxdepth}%
   \let\@elt\relax
   \xdef\@freelist{\@freelist\L@toplist}\global\let\L@toplist\@empty
   \@colht\@fixht
@@ -1188,7 +1195,7 @@
   \setbox\@leftcolumn\vbox to\@fixht{\boxmaxdepth\maxdepth
       \unvbox\@leftcolumn
       \vskip\textfloatsep\botfigrule\unvbox\@tempboxa\vskip-\floatsep
-      \vss}%
+      \nidanfloat@vfilmaxdepth}%
   \let\@elt\relax
   \xdef\@freelist{\@freelist\L@botlist}\global\let\L@botlist\@empty
   \@colht\@fixht
@@ -1198,7 +1205,7 @@
   \setbox\@outputbox\vbox to\@rightfixht{\boxmaxdepth\maxdepth
       \unvbox\@tempboxa
       \vskip-\floatsep\topfigrule\vskip\textfloatsep\unvbox\@outputbox
-      \vss}%
+      \nidanfloat@vfilmaxdepth}%
   \let\@elt\relax
   \xdef\@freelist{\@freelist\R@toplist}\global\let\R@toplist\@empty
   \@colht\@rightfixht
@@ -1208,7 +1215,7 @@
   \setbox\@outputbox\vbox to\@rightfixht{\boxmaxdepth\maxdepth
       \unvbox\@outputbox
       \vskip\textfloatsep\botfigrule\unvbox\@tempboxa\vskip-\floatsep
-      \vss}%
+      \nidanfloat@vfilmaxdepth}%
   \let\@elt\relax
   \xdef\@freelist{\@freelist\R@botlist}\global\let\R@botlist\@empty
   \@colht\@rightfixht

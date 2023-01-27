@@ -1,0 +1,29 @@
+\makeatletter
+\def\TABLE{\@ifnextchar*{\TABLE@}{\TABLE@{}}}
+\def\TABLE@#1#2{%
+  \begin{table#1}[ht]
+  \caption{#2}
+  \centering
+  \begin{tabular}{p{0.25\linewidth}p{0.25\linewidth}p{0.25\linewidth}}
+  \hline
+  column 1 & column 2 & column 3\\
+  \hline
+  cell 1 & cell 2 & cell 3\\
+  cell 1 & cell 2 & cell 3\\
+  \hline
+  \end{tabular}
+  \end{table#1}}
+\makeatother
+
+\documentclass[twocolumn]{article}
+\textheight8cm
+\usepackage{lipsum}
+
+\usepackage{nidanfloat}
+\begin{document}
+
+\TABLE*{First}
+\TABLE{Second}
+\TABLE*{Third}
+\lipsum*[1-4]
+\end{document}

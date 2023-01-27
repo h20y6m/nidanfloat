@@ -20,6 +20,7 @@
 \DeclareOption{nobalance}{\relax}
 \ExecuteOptions{nobalance}
 \ProcessOptions
+\def\nidanfloat@vfilmaxdepth{\vskip\z@ \@plus 1fil \@minus\maxdepth}
 \newcommand\dblbotfraction{0.5}
 \newcount\c@dblbotnumber
 \setcounter{dblbotnumber}{2}
@@ -386,10 +387,8 @@
       \ifdim\@fixht>\textheight
         \@fixht\textheight
         \advance\@fixht-\@tempdima
-        \advance\@fixht\maxdepth
         \vbadness=\@M \splittopskip=\topskip \splitmaxdepth=\maxdepth
         \setbox\z@=\vsplit\@leftcolumn to\@fixht
-        \advance\@fixht-\maxdepth
         \@tempdima\baselineskip \advance\@tempdima-\topskip
         \setbox\@outputbox=\vbox{%
             \ifvoid\@leftcolumn
@@ -397,7 +396,7 @@
               \unvbox\@leftcolumn\vskip\@tempdima
             \fi\relax
             \unvbox\@outputbox}% \vss moved from here
-        \setbox\@leftcolumn=\vbox to\@fixht{\unvbox\z@\vss}% to here (2017/05/01)
+        \setbox\@leftcolumn=\vbox to\@fixht{\unvbox\z@\nidanfloat@vfilmaxdepth}% to here (2017/05/01)
       \fi
       \@fixht\ht\@leftcolumn
         \advance\@fixht\dp\@leftcolumn \advance\@fixht\@floatht
@@ -408,12 +407,10 @@
       \ifdim\@rightfixht>\textheight
         \@rightfixht\textheight
         \advance\@rightfixht-\@tempdima
-        \advance\@rightfixht\maxdepth
         \vbadness=\@M \splittopskip=\topskip \splitmaxdepth=\maxdepth
         \setbox\z@=\vsplit\@outputbox to\@rightfixht
-        \advance\@rightfixht-\maxdepth
         \unvbox\@outputbox
-        \setbox\@outputbox=\vbox to\@rightfixht{\unvbox\z@\vss}%
+        \setbox\@outputbox=\vbox to\@rightfixht{\unvbox\z@\nidanfloat@vfilmaxdepth}%
       \fi
       \@rightfixht\ht\@outputbox
         \advance\@rightfixht\dp\@outputbox \advance\@rightfixht\@floatht
@@ -432,7 +429,7 @@
   \setbox\@leftcolumn\vbox to\@fixht{\boxmaxdepth\maxdepth
       \unvbox\@tempboxa
       \vskip-\floatsep\topfigrule\vskip\textfloatsep\unvbox\@leftcolumn
-      \vss}%
+      \nidanfloat@vfilmaxdepth}%
   \let\@elt\relax
   \xdef\@freelist{\@freelist\L@toplist}\global\let\L@toplist\@empty
   \@colht\@fixht
@@ -442,7 +439,7 @@
   \setbox\@leftcolumn\vbox to\@fixht{\boxmaxdepth\maxdepth
       \unvbox\@leftcolumn
       \vskip\textfloatsep\botfigrule\unvbox\@tempboxa\vskip-\floatsep
-      \vss}%
+      \nidanfloat@vfilmaxdepth}%
   \let\@elt\relax
   \xdef\@freelist{\@freelist\L@botlist}\global\let\L@botlist\@empty
   \@colht\@fixht
@@ -452,7 +449,7 @@
   \setbox\@outputbox\vbox to\@rightfixht{\boxmaxdepth\maxdepth
       \unvbox\@tempboxa
       \vskip-\floatsep\topfigrule\vskip\textfloatsep\unvbox\@outputbox
-      \vss}%
+      \nidanfloat@vfilmaxdepth}%
   \let\@elt\relax
   \xdef\@freelist{\@freelist\R@toplist}\global\let\R@toplist\@empty
   \@colht\@rightfixht
@@ -462,7 +459,7 @@
   \setbox\@outputbox\vbox to\@rightfixht{\boxmaxdepth\maxdepth
       \unvbox\@outputbox
       \vskip\textfloatsep\botfigrule\unvbox\@tempboxa\vskip-\floatsep
-      \vss}%
+      \nidanfloat@vfilmaxdepth}%
   \let\@elt\relax
   \xdef\@freelist{\@freelist\R@botlist}\global\let\R@botlist\@empty
   \@colht\@rightfixht
