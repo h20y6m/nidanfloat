@@ -1,0 +1,54 @@
+%#!pdflatex
+% This program is in the public domainp
+\RequirePackage[2021/11/14]{latexrelease}
+\documentclass[twocolumn]{article}
+\usepackage{nidanfloat,lipsum,graphicx}
+\setlength\parskip{0pt}
+\flushbottom
+\begin{document}
+
+\begin{figure*}[t]\centering
+  \rule{\columnwidth}{0.25\textheight}
+  \caption{black box}
+\end{figure*}
+
+\lipsum[1-2]
+\par\hrulefill\par\hrulefill\par
+
+\lipsum[1-2]
+\par\hrulefill\par\hrulefill\par
+
+\clearpage
+
+\begin{figure*}[t]\centering
+  \rule{\columnwidth}{0.25\textheight}
+  \caption{black box}
+\end{figure*}
+
+\lipsum[1-2]
+\par\hrulefill\par\hrulefill\par
+
+a
+\vfill
+\lipsum[1-2]
+\newpage
+
+\begin{figure*}[t]\centering
+  \rule{\columnwidth}{0.25\textheight}
+  \caption{black box}
+\end{figure*}
+
+a\par
+\vfill\hrule\newpage
+a\par\vfill\hrule\newpage
+
+\newpage
+
+\begin{figure*}[t]\centering
+  \rule{\columnwidth}{0.25\textheight}
+  \caption{black box}
+\end{figure*}
+
+\lipsum[1-6]
+
+\end{document}
